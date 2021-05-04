@@ -1,16 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using System;
-
-public delegate void OnGatherablesAmountChangedHandler();
 
 public class GatherablesManager : MonoBehaviour
 {
     public int foodAmount, woodAmount, stoneAmount, goldAmount;
-
-    public event OnGatherablesAmountChangedHandler OnGatherablesAmountChanged;
 
     private void Awake()
     {
@@ -35,6 +27,6 @@ public class GatherablesManager : MonoBehaviour
                 break;
         }
 
-        OnGatherablesAmountChanged();
+        EventManager.Instance.GatherablesAmountChanged();
     }
 }

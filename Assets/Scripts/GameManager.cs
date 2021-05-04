@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.StartListening(GameData.EventTypes.TappedToPlay, OnTappedToPlay);
+        //EventManager.StartListening(GameData.EventTypes.TappedToPlay, OnTappedToPlay);
     }
 
     void Awake()
@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
 
                 //_levelInstance.transform.Find("Floor").gameObject.SetActive(false);
 
-                EventManager.TriggerEvent(GameData.EventTypes.GameReady);
+                //EventManager.TriggerEvent(GameData.EventTypes.GameReady);
                 SetGameState(GameState.MainMenu);
                 break;
             case GameState.MainMenu:
@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         SetGameState(GameState.Playing);
-        EventManager.TriggerEvent(GameData.EventTypes.GameStarted);
+        //EventManager.TriggerEvent(GameData.EventTypes.GameStarted);
     }
 
     public void ReloadScene()

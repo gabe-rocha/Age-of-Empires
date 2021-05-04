@@ -18,7 +18,7 @@ public class GUIManager : MonoBehaviour
         yield return new WaitUntil(() => GameManager.Instance.gatherablesManager);
 
         gatherablesManager = GameManager.Instance.gatherablesManager;
-        gatherablesManager.OnGatherablesAmountChanged += OnGatherablesAmountChanged;
+        EventManager.Instance.OnGatherablesAmountChanged += OnGatherablesAmountChanged;
     }
 
     private void OnGatherablesAmountChanged()
