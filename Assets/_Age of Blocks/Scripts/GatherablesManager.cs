@@ -27,6 +27,6 @@ public class GatherablesManager : MonoBehaviour
                 break;
         }
 
-        EventManager.Instance.GatherablesAmountChanged();
+        EventManager.WorldEvents.GatherablesAmountChanged();
     }
 }
