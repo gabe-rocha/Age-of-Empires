@@ -18,18 +18,15 @@ public class Player : MonoBehaviour {
 
     private StateMachine stateMachine;
     private float horizontal, vertical;
-    private bool isRunning = false, isWalking = false;
-    private TopDown3DCharacterOn2DWorldControllerVector inputController;
     
     private void Awake() {
-        inputController = GetComponent<TopDown3DCharacterOn2DWorldControllerVector>();
 
         stateMachine = new StateMachine();
 
         //these are our states
         var idle = new PlayerStateIdle();
-        var run = new PlayerStateRun(this, anim, maxSpeed);
-        var walk = new PlayerStateWalk(this, anim, maxSpeed);
+        var run = new PlayerStateRun(this, anim, maxSpeed, rotationSpeed);
+        var walk = new PlayerStateWalk(this, anim, maxSpeed, rotationSpeed);
         var attack01 = new PlayerStateAttack01(anim);
         var attack02 = new PlayerStateAttack02(anim);
         var attack03 = new PlayerStateAttack03(anim);
@@ -47,7 +44,7 @@ public class Player : MonoBehaviour {
         void AddTransition(IState from, IState to, Func<bool> condition) => stateMachine.AddTransitionToDic(from, to, condition);
         Func<bool> IsRunning() => () => CheckIsRunning();
         Func<bool> IsWalking() => () => CheckIsWalking();
-        Func<bool> IsIdle() => () => !isRunning && !isWalking;
+        Func<bool> IsIdle() => () => CheckIsIdle();
 
         stateMachine.SetState(idle);
     }
@@ -57,6 +54,10 @@ public class Player : MonoBehaviour {
         vertical = Input.GetAxisRaw("Vertical");
         stateMachine.Tick();
     }
+
+    private bool CheckIsIdle() {
+        return (Mathf.Abs(horizontal) < movementDeadzone && Mathf.Abs(vertical) < movementDeadzone);
+        }
 
     private bool CheckIsWalking() {
         if(!handleWalk) {
