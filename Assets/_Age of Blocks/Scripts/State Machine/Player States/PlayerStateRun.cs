@@ -9,7 +9,8 @@ public class PlayerStateRun : IState
     private readonly float maxSpeed;
     private readonly float rotationSpeed;
     private readonly int runBool = Animator.StringToHash("Run");
-    private Vector3 moveTargetPosition;
+    private Vector3 movementDirection, playerVelocity;
+    private Camera mainCamera => Camera.main;
 
     public PlayerStateRun(Player player, Animator anim, float maxSpeed, float rotationSpeed) {
         this.player = player;
@@ -20,20 +21,36 @@ public class PlayerStateRun : IState
 
     public void Tick() {
         Move();
+        Fall();
         Rotate();
     }
 
     private void Move() {
-        moveTargetPosition = player.transform.position;
-        moveTargetPosition.x += Input.GetAxisRaw("Horizontal");
-        moveTargetPosition.y += Input.GetAxisRaw("Vertical");
-        player.transform.position = Vector3.Lerp(player.transform.position, moveTargetPosition, maxSpeed * Time.deltaTime); //we use FixedUpdate just when using RigidBody
+        //moveTargetPosition = player.transform.position;
+        
+        movementDirection.x = Input.GetAxisRaw("Horizontal");
+        movementDirection.z = Input.GetAxisRaw("Vertical");
+        
+        //Align with camera forward
+        movementDirection = mainCamera.transform.forward * movementDirection.z + mainCamera.transform.right * movementDirection.x;
+        movementDirection.Normalize();
+
+        movementDirection.y = 0;
+        playerVelocity = movementDirection * maxSpeed * Time.deltaTime;
+        player.transform.position += playerVelocity;
+    }
+    private void Fall() {
+        if (!player.isGrounded) {
+            //Apply gravity
+            playerVelocity.x = 0;
+            playerVelocity.y = GameData.gravityForce * player.fallSpeed * Time.deltaTime;
+            playerVelocity.z = 0;
+            player.transform.position += playerVelocity;
+        }
     }
 
-    public void Rotate() {
-        float angle = Mathf.Atan2(moveTargetPosition.y - player.transform.position.y, moveTargetPosition.x - player.transform.position.x) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, -angle, 0));
-        player.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+public void Rotate() {
+        player.transform.forward = playerVelocity;
     }
 
     public void OnEnter() {

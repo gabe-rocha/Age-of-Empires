@@ -18,8 +18,6 @@ public class StateMachine
             SetState(transition.To);
         }
 
-        UtilsClass.DebugDrawText(currentState.ToString(), Vector3.zero, Color.white, 10, .1f);
-
         currentState?.Tick();
     }
 
@@ -83,6 +81,10 @@ public class StateMachine
         }
 
         return null;
+    }
+
+    public IState GetCurrentStateForDebugOnly() {
+        return currentState;
     }
 }
 

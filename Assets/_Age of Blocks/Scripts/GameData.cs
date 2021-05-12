@@ -28,6 +28,7 @@ public static class GameData
     //DATA VARIABLES - Must be reset when Scene Loads
     //************************************************************************************
     public static int currentLevel;
+    public static float gravityForce = -9.8f;
 
     //************************************************************************************
 
